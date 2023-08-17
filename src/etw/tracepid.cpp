@@ -1,7 +1,6 @@
 #include "trace.hpp"
 #include "string_dict_key.hpp"
 #include <unordered_map>
-#include <vector>
 #include <stdexcept>
 #include "unicode/encoding.hpp"
 #define __TRACEPID_SELF_INCLUSION__
@@ -81,6 +80,15 @@ void PidStoragePerImage::del_image_name(const std::wstring_view name_view) {
     }
 }
 
+std::vector<std::wstring_view> PidStoragePerImage::get_all_image_names(void) {
+    std::vector<std::wstring_view> ret;
+    ret.resize(this->_data->image_map.size());
+    for (auto image_map_kvp : this->_data->image_map) {
+        ret.emplace_back(image_map_kvp.first.get_raw_view());
+    }
+    return ret;
+}
+
 const pid_set_t& PidStoragePerImage::get_image_pids(const std::wstring_view name_view) {
     auto image_map_target_pair = this->_data->image_map.find(wstring_view_with_source(name_view));
     if (image_map_target_pair == this->_data->image_map.end()) throw std::invalid_argument("image is not traced");
@@ -129,6 +137,15 @@ void PidStorageAll::del_image_name(const std::wstring_view name_view) {
     auto name_short = sWtoA(name_view);
     if (name_short.length() > 14) name_short.resize(14);
     this->_data->short_name_set.erase(string_view_with_source(name_short));
+}
+
+std::vector<std::wstring_view> PidStorageAll::get_all_image_names(void) {
+    std::vector<std::wstring_view> ret;
+    ret.resize(this->_data->image_name_set.size());
+    for (auto image_name : this->_data->image_name_set) {
+        ret.emplace_back(image_name.get_raw_view());
+    }
+    return ret;
 }
 
 const pid_set_t& PidStorageAll::get_all_pids(void) {

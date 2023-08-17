@@ -3,6 +3,7 @@
 #define __TRACEPID_HPP__
 
 #include <string>
+#include <vector>
 #include <unordered_set>
 #include <mutex>
 
@@ -130,6 +131,20 @@ public:
      * \endif
      */
     virtual void del_image_name(const std::wstring_view name_view) = 0;
+    /**
+     * \if en-US
+     * @brief get all monitored image names
+     * @note all those names are views of internal strings, they may invalidate
+     *       halfway if you do not acquire the internal lock of PID storage
+     * \endif
+     * 
+     * \if zh-CN
+	 * @brief 获取受监控的所有映像名
+	 * @note 返回的所有名称都是内部字符串的视图，如果你不获取PID存储的内部锁，
+     *       它们可能会中途失效
+     * \endif
+     */
+    virtual std::vector<std::wstring_view> get_all_image_names(void) = 0;
 };
 
 /**
@@ -161,6 +176,7 @@ public:
         this->add_image_name(name_view, init_fn(name_view));
     }
     void del_image_name(const std::wstring_view name_view);
+    std::vector<std::wstring_view> get_all_image_names(void);
     const pid_set_t& get_image_pids(const std::wstring_view name_view);
 };
 
@@ -191,6 +207,7 @@ public:
         this->add_image_name(name_view, init_fn(name_view));
     }
     void del_image_name(const std::wstring_view name_view);
+    std::vector<std::wstring_view> get_all_image_names(void);
     const pid_set_t& get_all_pids(void);
 };
 
