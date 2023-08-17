@@ -1,6 +1,6 @@
 [submodule "extlibs/windows-bricks"]
 	path = extlibs/windows-bricks
-	url = E:\\Users\\23Xor\\Desktop\\windows-bricks
+	url = https://github.com/TsXor/windows-bricks.git
 [submodule "extlibs/fmt"]
 	path = extlibs/fmt
-	url = E:\\Users\\23Xor\\Desktop\\fmt
+	url = https://github.com/fmtlib/fmt.git
