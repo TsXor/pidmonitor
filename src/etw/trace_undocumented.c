@@ -1,3 +1,5 @@
+#ifdef __TRACE_USE_UNDOCUMENTED__
+
 #include <Windows.h>
 #include <strsafe.h>
 #include "trace_undocumented.h"
@@ -535,3 +537,5 @@ ULONG WINAPI __XYZ_ControlTraceW(
         ControlCode
     );
 }
+
+#endif // __TRACE_USE_UNDOCUMENTED__

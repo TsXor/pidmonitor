@@ -2,8 +2,8 @@
 #include <thread>
 #include "winexc.hpp"
 #include <handleapi.h>
-#include "trace_undocumented.h"
 #include "trace.hpp"
+#include "trace_undocumented.h"
 
 
 namespace EtwTrace {

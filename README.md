@@ -10,6 +10,9 @@ target_link_libraries(your_target tracepid)
 target_include_directories(your_target PRIVATE path/to/pidmonitor/include)
 ```
 
+## 使用非公开的ETW接口
+定义宏`__TRACE_USE_UNDOCUMENTED__`。  
+注意：此接口取自[TraceEvent](https://github.com/Biswa96/TraceEvent)，使用后请遵守GPL协议。  
 
 ## 测试
 ```bash

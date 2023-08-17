@@ -1,3 +1,5 @@
+#ifdef __TRACE_USE_UNDOCUMENTED__
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -26,3 +28,5 @@ ULONG WINAPI __XYZ_ControlTraceW(
 #ifdef __cplusplus
 } // extern "C"
 #endif
+
+#endif // __TRACE_USE_UNDOCUMENTED__
