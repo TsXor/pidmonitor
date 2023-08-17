@@ -1,5 +1,5 @@
 {
     "C_Cpp.codeAnalysis.clangTidy.config": "{SystemHeaders: false}",
-    "cmake.sourceDirectory": "E:/Users/23Xor/Desktop/pidmonitor",
+    "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.buildDirectory": "${workspaceFolder}/build/cmake-build-vscplugin",
 }
