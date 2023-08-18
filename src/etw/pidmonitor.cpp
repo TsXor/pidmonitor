@@ -190,9 +190,8 @@ static VOID WINAPI __tracepid_etw_handler_cb(PEVENT_RECORD EventRecord) {
             std::wstring_view image_name = __path_get_last(std::wstring_view((wchar_t* )PTR_MARCH_IN_BYTE(EventRecord->UserData, 60)));
             for (auto pids_ptr : tracer_data_ptr->pids_ptrs) {
                 try {
-                    pids_ptr->acquire_lock();
+                    auto wlock = pids_ptr->get_scope_wlock();
                     pids_ptr->add_pid(image_name, pid);
-                    pids_ptr->release_lock();
                 } catch(...) {
                     return;
                 }
@@ -204,9 +203,8 @@ static VOID WINAPI __tracepid_etw_handler_cb(PEVENT_RECORD EventRecord) {
             std::string_view short_image_name = std::string_view((char* )PTR_MARCH_IN_BYTE(EventRecord->UserData, 84));
             for (auto pids_ptr : tracer_data_ptr->pids_ptrs) {
                 try {
-                    pids_ptr->acquire_lock();
+                    auto wlock = pids_ptr->get_scope_wlock();
                     pids_ptr->del_pid(short_image_name, pid);
-                    pids_ptr->release_lock();
                 } catch(...) {
                     return;
                 }

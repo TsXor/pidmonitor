@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_set>
 #include <mutex>
+#include <shared_mutex>
 
 #ifndef _WIN_PID_T_
 #define _WIN_PID_T_
@@ -57,14 +58,14 @@ class PidStorageBase {
     friend VOID WINAPI __tracepid_etw_handler_cb(PEVENT_RECORD EventRecord);
 #endif
 private:
-    std::mutex _rwlock;
+    std::shared_mutex _rwlock;
     virtual void add_pid(const std::wstring_view name_view, win_pid_t pid) = 0;
     // Note: In ProcessStop event, encoding of ImageName is ANSI, and it will be cut to first 14 chars.
     // 注意：退出时ImageName为ANSI编码，且会被裁剪到前14个字符。
     virtual void del_pid(const std::string_view short_name_view, win_pid_t pid) = 0;
 public:
-    void acquire_lock(void) {this->_rwlock.lock();}
-    void release_lock(void) {this->_rwlock.unlock();}
+    auto get_scope_rlock(void) {return std::shared_lock(this->_rwlock);}
+    auto get_scope_wlock(void) {return std::unique_lock(this->_rwlock);}
     /**
      * \if en-US
      * @brief bind this PID storage to a tracer

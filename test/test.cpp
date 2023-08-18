@@ -32,9 +32,10 @@ int main(int argc, char** argv) {
         std::atomic_bool run_flag = true;
         auto print_thread = std::thread([&run_flag](PidStorageAll* pids_ptr){
             while ((bool)run_flag) {
-                pids_ptr->acquire_lock();
-                fmt::print("{}\n", pids_ptr->get_all_pids());
-                pids_ptr->release_lock();
+                {
+                    pids_ptr->get_scope_rlock();
+                    fmt::print("{}\n", pids_ptr->get_all_pids());
+                }
                 std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             }
         }, &pids);
