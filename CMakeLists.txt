@@ -54,10 +54,10 @@ target_link_libraries(pidmon_test tracepid)
 # install
 file(GLOB pidmon_headers  "${CMAKE_CURRENT_LIST_DIR}/include/*")
 install(FILES ${pidmon_headers}
-        DESTINATION ${CMAKE_CURRENT_LIST_DIR}/dist/${ARCH}/include)
+        DESTINATION ${CMAKE_CURRENT_LIST_DIR}/dist/include)
 install(TARGETS name2pid
-        DESTINATION ${CMAKE_CURRENT_LIST_DIR}/dist/${ARCH}/lib)
+        DESTINATION ${CMAKE_CURRENT_LIST_DIR}/dist/lib/${ARCH})
 install(TARGETS tracepid
-        DESTINATION ${CMAKE_CURRENT_LIST_DIR}/dist/${ARCH}/lib)
+        DESTINATION ${CMAKE_CURRENT_LIST_DIR}/dist/lib/${ARCH})
 install(TARGETS pidmon_test
-        DESTINATION ${CMAKE_CURRENT_LIST_DIR}/dist/${ARCH}/bin)
+        DESTINATION ${CMAKE_CURRENT_LIST_DIR}/dist/bin/${ARCH})
