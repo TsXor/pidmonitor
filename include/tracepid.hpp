@@ -13,7 +13,7 @@ typedef unsigned long win_pid_t;
 #endif // _WIN_PID_T_
 
 using pid_set_t = std::unordered_set<win_pid_t>;
-typedef pid_set_t (*pid_init_fn_t)(const std::wstring_view&);
+using pid_list_t = std::vector<win_pid_t>;
 
 #ifdef __TRACEPID_SELF_INCLUSION__
 static VOID WINAPI __tracepid_etw_handler_cb(PEVENT_RECORD EventRecord);
@@ -81,7 +81,7 @@ public:
      * \if en-US
      * @brief start monitoring an image name
      * @param name_view image name
-     * @param init inital PIDs of this image name
+     * @param init initial PIDs of this image name
      * \endif
      * 
      * \if zh-CN
@@ -95,7 +95,7 @@ public:
      * \if en-US
      * @brief start monitoring an image name
      * @param name_view image name
-     * @param init inital PIDs of this image name
+     * @param init initial PIDs of this image name
      * \endif
      * 
      * \if zh-CN
@@ -109,16 +109,29 @@ public:
      * \if en-US
      * @brief start monitoring an image name
      * @param name_view image name
+     * @param init initial PIDs of this image name
+     * \endif
+     * 
+     * \if zh-CN
+	 * @brief 开始监控某一映像名
+	 * @param name_view 映像名称
+     * @param init 该映像名称的初始PID集
+     * \endif
+     */
+    virtual void add_image_name(const std::wstring_view name_view, const pid_list_t& init) = 0;
+    /**
+     * \if en-US
+     * @brief start monitoring an image name
+     * @param name_view image name
      * @param init_fn a function to get inital PIDs of this image name
      * \endif
      * 
      * \if zh-CN
 	 * @brief 开始监控某一映像名
 	 * @param name_view 映像名称
-     * @param init_fn 用于获取该映像名称的初始PID集的函数
      * \endif
      */
-    virtual void add_image_name(const std::wstring_view name_view, pid_init_fn_t init_fn) = 0;
+    virtual void add_image_name(const std::wstring_view name_view) = 0;
     /**
      * \if en-US
      * @brief stop monitoring an image name
@@ -172,9 +185,11 @@ public:
         // copy and move
         this->add_image_name(name_view, std::move(pid_set_t(init)));
     }
-    void add_image_name(const std::wstring_view name_view, pid_init_fn_t init_fn) {
-        this->add_image_name(name_view, init_fn(name_view));
+    void add_image_name(const std::wstring_view name_view, const pid_list_t& init) {
+        // convert to set
+        this->add_image_name(name_view, std::move(pid_set_t(init.begin(), init.end())));
     }
+    void add_image_name(const std::wstring_view name_view);
     void del_image_name(const std::wstring_view name_view);
     std::vector<std::wstring_view> get_all_image_names(void);
     const pid_set_t& get_image_pids(const std::wstring_view name_view);
@@ -203,9 +218,11 @@ public:
         // copy and move
         this->add_image_name(name_view, std::move(pid_set_t(init)));
     }
-    void add_image_name(const std::wstring_view name_view, pid_init_fn_t init_fn) {
-        this->add_image_name(name_view, init_fn(name_view));
+    void add_image_name(const std::wstring_view name_view, const pid_list_t& init) {
+        // convert to set
+        this->add_image_name(name_view, std::move(pid_set_t(init.begin(), init.end())));
     }
+    void add_image_name(const std::wstring_view name_view);
     void del_image_name(const std::wstring_view name_view);
     std::vector<std::wstring_view> get_all_image_names(void);
     const pid_set_t& get_all_pids(void);

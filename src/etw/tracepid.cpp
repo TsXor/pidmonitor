@@ -6,6 +6,7 @@
 #define __TRACEPID_SELF_INCLUSION__
 #include "../../include/tracepid.hpp"
 #undef __TRACEPID_SELF_INCLUSION__
+#include "../../include/name2pid.hpp"
 
 
 #define PTR_AT_OFFSET_AS_TYPE(ptr, offset, type) (*(type* )(((unsigned char* )(ptr)) + offset))
@@ -64,6 +65,10 @@ void PidStoragePerImage::add_image_name(const std::wstring_view name_view, pid_s
         std::forward_as_tuple(std::move(name_short_persist)),
         std::forward_as_tuple(name_persist.data(), name_persist.length())
     );
+}
+
+void PidStoragePerImage::add_image_name(const std::wstring_view name_view) {
+    this->add_image_name(name_view, NameToPidWmi(name_view));
 }
 
 void PidStoragePerImage::del_image_name(const std::wstring_view name_view) {
@@ -131,8 +136,16 @@ void PidStorageAll::add_image_name(const std::wstring_view name_view, pid_set_t&
     this->_data->short_name_set.emplace(std::move(name_short_persist));
 }
 
+void PidStorageAll::add_image_name(const std::wstring_view name_view) {
+    this->add_image_name(name_view, NameToPidWmi(name_view));
+}
+
 void PidStorageAll::del_image_name(const std::wstring_view name_view) {
     this->_data->image_name_set.erase(wstring_view_with_source(name_view));
+
+    for (auto pid_of_name : NameToPidWmi(name_view)) {
+        this->_data->pid_set.erase(pid_of_name);
+    }
     
     auto name_short = sWtoA(name_view);
     if (name_short.length() > 14) name_short.resize(14);

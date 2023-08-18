@@ -8,7 +8,7 @@
 typedef unsigned long win_pid_t;
 #endif // _WIN_PID_T_
 
-#include <unordered_set>
+#include <vector>
 #include <string>
 
 
@@ -22,9 +22,9 @@ typedef unsigned long win_pid_t;
  *  @param interpreted
  *         name of interpreted file
  *
- *  @return an unordered_set that contains all PIDs of required name
+ *  @return a vector that contains all PIDs of required name
  */
-extern std::unordered_set<win_pid_t> NameToPidWmiEx(const std::wstring_view& procname,
+extern std::vector<win_pid_t> NameToPidWmiEx(const std::wstring_view& procname,
                                                     const std::wstring_view& interpreted);
 
 /**
@@ -33,8 +33,8 @@ extern std::unordered_set<win_pid_t> NameToPidWmiEx(const std::wstring_view& pro
  *  @param procname
  *         name of process
  *
- *  @return an unordered_set that contains all PIDs of required name
+ *  @return a vector that contains all PIDs of required name
  */
-extern std::unordered_set<win_pid_t> NameToPidWmi(const std::wstring_view& procname);
+extern std::vector<win_pid_t> NameToPidWmi(const std::wstring_view& procname);
 
 #endif // __NAME2PID_HPP__

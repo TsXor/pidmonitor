@@ -38,6 +38,7 @@ target_link_libraries(trace_undocumented ntdll)
 # tracepid_etw
 add_library(tracepid STATIC src/etw/tracepid.cpp ${CMAKE_CURRENT_LIST_DIR}/src/etw/trace.cpp)
 target_link_libraries(tracepid trace_undocumented)
+target_link_libraries(tracepid name2pid)
 target_include_directories(tracepid PRIVATE ${CMAKE_CURRENT_LIST_DIR}/extlibs/windows-bricks/include)
 
 # pidmon_test

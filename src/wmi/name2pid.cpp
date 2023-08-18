@@ -9,10 +9,10 @@
 // backend used to query WMI imformation
 static WMIQuery::Backend __wmiqbk;
 
-std::unordered_set<win_pid_t> NameToPidWmiEx(const std::wstring_view& procname,
+std::vector<win_pid_t> NameToPidWmiEx(const std::wstring_view& procname,
                                              const std::wstring_view& interpreted) {
     bool check_interpreted = !interpreted.empty();
-    std::unordered_set<win_pid_t> ret;
+    std::vector<win_pid_t> ret;
     std::wstring query = fmt::format(L"select CommandLine, ProcessId from Win32_Process where Name='{}'", procname);
     WMIQuery::ResultProperty prop_cmdline; WMIQuery::ResultProperty prop_pid;
     __wmiqbk.wql_query(query).traverse(
@@ -21,7 +21,7 @@ std::unordered_set<win_pid_t> NameToPidWmiEx(const std::wstring_view& procname,
             result.get_property(L"ProcessId", prop_pid);
             win_pid_t pid = prop_pid.data().ulVal;
             if (!check_interpreted) {
-                ret.emplace(pid); return;
+                ret.emplace_back(pid); return;
             }
             
             result.get_property(L"CommandLine", prop_cmdline);
@@ -30,7 +30,7 @@ std::unordered_set<win_pid_t> NameToPidWmiEx(const std::wstring_view& procname,
             int wargc; wchar_t** wargv = CommandLineToArgvW(cmdline, &wargc);
             for (size_t i = 1; i < wargc; i++) {
                 if (std::wstring_view(wargv[i]) == interpreted) {
-                    ret.emplace(pid); break;
+                    ret.emplace_back(pid); break;
                 }
             }
             LocalFree(wargv);
@@ -39,6 +39,6 @@ std::unordered_set<win_pid_t> NameToPidWmiEx(const std::wstring_view& procname,
     return ret;
 }
 
-extern std::unordered_set<win_pid_t> NameToPidWmi(const std::wstring_view& procname) {
+extern std::vector<win_pid_t> NameToPidWmi(const std::wstring_view& procname) {
     return NameToPidWmiEx(procname, std::wstring_view(L""));
 }

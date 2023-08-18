@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
         PidStorageAll pids;
         PidTracer etw_tracer = {session_name};
         const auto program_name = std::wstring_view(wargv[1]);
-        pids.add_image_name(program_name, NameToPidWmi);
+        pids.add_image_name(program_name);
         pids.subscribe(etw_tracer);
         
         std::atomic_bool run_flag = true;
