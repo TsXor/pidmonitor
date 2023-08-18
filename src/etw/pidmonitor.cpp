@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include "unicode/encoding.hpp"
 #define __TRACEPID_SELF_INCLUSION__
-#include "../../include/tracepid.hpp"
+#include "../../include/pidmonitor.hpp"
 #undef __TRACEPID_SELF_INCLUSION__
 #include "../../include/name2pid.hpp"
 

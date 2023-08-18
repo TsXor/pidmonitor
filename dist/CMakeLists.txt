@@ -7,9 +7,6 @@ if (NOT DEFINED PIDMONITOR_ARCH)
     set(PIDMONITOR_ARCH "x64")
 endif()
 
-add_library(name2pid STATIC IMPORTED)
-set_target_properties(name2pid PROPERTIES
-    IMPORTED_LOCATION ${CMAKE_CURRENT_LIST_DIR}/${PIDMONITOR_ARCH}/lib/libname2pid.a)
-add_library(tracepid STATIC IMPORTED)
-set_target_properties(tracepid PROPERTIES
-    IMPORTED_LOCATION ${CMAKE_CURRENT_LIST_DIR}/${PIDMONITOR_ARCH}/lib/libtracepid.a)
+add_library(pidmonitor STATIC IMPORTED)
+set_target_properties(pidmonitor PROPERTIES
+    IMPORTED_LOCATION ${CMAKE_CURRENT_LIST_DIR}/${PIDMONITOR_ARCH}/lib/libpidmonitor.a)

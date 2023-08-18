@@ -8,8 +8,7 @@
 #include <atomic>
 #include "exit_event.h"
 #include "unicode/wargv.h"
-#include "name2pid.hpp"
-#include "tracepid.hpp"
+#include "pidmonitor.hpp"
 
 
 int main(int argc, char** argv) {
