@@ -22,25 +22,21 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/extlibs/fmt fmtlib.out EXCLUDE_FROM_A
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/extlibs/windows-bricks windows-bricks.out EXCLUDE_FROM_ALL)
 
 
-# name2pid
-add_library(name2pid STATIC ${CMAKE_CURRENT_LIST_DIR}/src/wmi/name2pid.cpp)
-target_link_libraries(name2pid ole)
-target_link_libraries(name2pid oleauto)
-target_link_libraries(name2pid wbemuuid)
-target_include_directories(name2pid PRIVATE ${CMAKE_CURRENT_LIST_DIR}/extlibs/windows-bricks/include)
-target_link_libraries(name2pid fmt::fmt)
-target_include_directories(name2pid PRIVATE ${CMAKE_CURRENT_LIST_DIR}/extlibs/fmt/include)
-
 # trace_undocumented
 #add_library(trace_undocumented STATIC ${CMAKE_CURRENT_LIST_DIR}/src/etw/trace_undocumented.c)
 #target_link_libraries(trace_undocumented ntdll)
 
 # pidmonitor
 add_library(pidmonitor STATIC ${CMAKE_CURRENT_LIST_DIR}/src/etw/pidmonitor.cpp
-                              ${CMAKE_CURRENT_LIST_DIR}/src/etw/trace.cpp)
+                              ${CMAKE_CURRENT_LIST_DIR}/src/etw/trace.cpp
+                              ${CMAKE_CURRENT_LIST_DIR}/src/wmi/name2pid.cpp)
 #target_link_libraries(pidmonitor trace_undocumented)
-target_link_libraries(pidmonitor name2pid)
 target_include_directories(pidmonitor PRIVATE ${CMAKE_CURRENT_LIST_DIR}/extlibs/windows-bricks/include)
+target_include_directories(pidmonitor PRIVATE ${CMAKE_CURRENT_LIST_DIR}/extlibs/fmt/include)
+target_link_libraries(pidmonitor ole)
+target_link_libraries(pidmonitor oleauto)
+target_link_libraries(pidmonitor wbemuuid)
+target_link_libraries(pidmonitor fmt::fmt)
 
 # pidmon_test
 add_executable(pidmon_test WIN32 test/test.cpp)
@@ -53,7 +49,7 @@ target_include_directories(pidmon_test PRIVATE ${CMAKE_CURRENT_LIST_DIR}/include
 
 
 # install
-file(GLOB pidmon_headers  "${CMAKE_CURRENT_LIST_DIR}/include/*")
+file(GLOB pidmon_headers "${CMAKE_CURRENT_LIST_DIR}/include/*")
 install(FILES ${pidmon_headers}
         DESTINATION ${CMAKE_CURRENT_LIST_DIR}/dist/include)
 install(TARGETS pidmonitor

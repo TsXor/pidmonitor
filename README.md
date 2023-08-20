@@ -8,6 +8,7 @@ add_subdirectory(path/to/pidmonitor pidmonitor.out EXCLUDE_FROM_ALL)
 target_link_libraries(your_target pidmonitor)
 target_include_directories(your_target PRIVATE path/to/pidmonitor/include)
 ```
+注：如果使用二进制包，则需要链接`fmt::fmt`。  
 
 ## 使用非公开的ETW接口
 定义宏`__TRACE_USE_UNDOCUMENTED__`。  
